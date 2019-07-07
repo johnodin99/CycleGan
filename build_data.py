@@ -11,10 +11,10 @@ except ImportError:
 
 FLAGS = tf.flags.FLAGS
 
-tf.flags.DEFINE_string('X_input_dir', 'data/Good2Bad/trainA',
-                       'X input directory, default: data/Good2Bad/trainA')
-tf.flags.DEFINE_string('Y_input_dir', 'data/Good2Bad/trainB',
-                       'Y input directory, default: data/Good2Bad/trainB')
+tf.flags.DEFINE_string('X_input_dir', 'data/Good2Bad/Train_Good',
+                       'X input directory, default: data/Good2Bad/Train_Good')
+tf.flags.DEFINE_string('Y_input_dir', 'data/Good2Bad/Train_Bad',
+                       'Y input directory, default: data/Good2Bad/Train_Bad')
 tf.flags.DEFINE_string('X_output_file', 'data/tfrecords/Good.tfrecords',
                        'X output tfrecords file, default: data/tfrecords/Good.tfrecords')
 tf.flags.DEFINE_string('Y_output_file', 'data/tfrecords/Bad.tfrecords',

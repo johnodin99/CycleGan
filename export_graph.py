@@ -16,7 +16,7 @@ import shutil
 
 FLAGS = tf.flags.FLAGS
 
-tf.flags.DEFINE_string('checkpoint_dir_by_time', r'./checkpoints/20190506-1709', 'checkpoints directory path')
+tf.flags.DEFINE_string('checkpoint_dir_by_time', r'./checkpoints/20190707-2232', 'checkpoints directory path')
 tf.flags.DEFINE_string('checkpoint_dir', r'./checkpoints', 'checkpoints directory path')
 tf.flags.DEFINE_string('XtoY_model', 'Good2Bad.pb', 'XtoY model name, default: Good2Bad.pb')
 tf.flags.DEFINE_string('YtoX_model', 'Bad2Good.pb', 'YtoX model name, default: Bad2Good.pb')

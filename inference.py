@@ -13,10 +13,8 @@ from time import time
 
 
 def inference():
-    #path_src_test_pic = r"./Train_input"
-    #path_dst_test_dir = r"./Train_output"
-    path_src_test_pic = r"./Test_input"
-    path_dst_test_dir = r"./Test_output"
+    path_src_test_pic = r"./data/Test_input"
+    path_dst_test_dir = r"./data/Test_output"
     temp_img_list = os.listdir(path_src_test_pic)
     image_size = 400
     path_model_dir = r"./pretrained"
