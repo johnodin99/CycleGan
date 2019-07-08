@@ -4,13 +4,14 @@ from reader import Reader
 from datetime import datetime
 import os
 import logging
+import shutil
 from utils import ImagePool
 
 FLAGS = tf.flags.FLAGS
-
-tf.flags.DEFINE_integer('save_ckpt_iteration', 100, 'batch size, default: 10000')
+tf.flags.DEFINE_integer('max_iteration', 30, 'the max iteration stop train, default: 10000')
+tf.flags.DEFINE_integer('save_ckpt_iteration', 10, 'batch size, default: 10000')
 tf.flags.DEFINE_integer('batch_size', 1, 'batch size, default: 1')
-tf.flags.DEFINE_integer('image_size', 400, 'image size, default: 256')
+tf.flags.DEFINE_integer('image_size', 256, 'image size, default: 256')
 tf.flags.DEFINE_bool('use_lsgan', True,
                      'use lsgan (mean squared error) or cross entropy loss, default: True')
 tf.flags.DEFINE_string('norm', 'instance',
@@ -113,6 +114,10 @@ def train():
         if step % FLAGS.save_ckpt_iteration == 0:
           save_path = saver.save(sess, checkpoints_dir + "/model.ckpt", global_step=step)
 
+        if step == FLAGS.max_iteration:
+          # When done, ask the threads to stop.
+          coord.request_stop()
+          coord.join(threads)
 
         step += 1
 

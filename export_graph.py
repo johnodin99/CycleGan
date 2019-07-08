@@ -16,20 +16,32 @@ import shutil
 
 FLAGS = tf.flags.FLAGS
 
-tf.flags.DEFINE_string('checkpoint_dir_by_time', r'./checkpoints/20190707-2232', 'checkpoints directory path')
 tf.flags.DEFINE_string('checkpoint_dir', r'./checkpoints', 'checkpoints directory path')
+tf.flags.DEFINE_string('save_model_dir', r'./pretrained', 'save model directory path')
 tf.flags.DEFINE_string('XtoY_model', 'Good2Bad.pb', 'XtoY model name, default: Good2Bad.pb')
-tf.flags.DEFINE_string('YtoX_model', 'Bad2Good.pb', 'YtoX model name, default: Bad2Good.pb')
+#  tf.flags.DEFINE_string('YtoX_model', 'Bad2Good.pb', 'YtoX model name, default: Bad2Good.pb')
 tf.flags.DEFINE_integer('image_size', '400', 'image size, default: 400')
 tf.flags.DEFINE_integer('ngf', 64,
                         'number of gen filters in first conv layer, default: 64')
 tf.flags.DEFINE_string('norm', 'instance',
                        '[instance, batch] use instance norm or batch norm, default: instance')
 
-files = os.listdir(FLAGS.checkpoint_dir_by_time)
+[i for i in os.listdir(FLAGS.checkpoint_dir)
+                          if os.path.isfile(os.path.join(FLAGS.checkpoint_dir, i))]
+for i in os.listdir(FLAGS.checkpoint_dir):
+  if os.path.isfile(os.path.join(FLAGS.checkpoint_dir, i)):
+    os.remove(os.path.join(FLAGS.checkpoint_dir, i))
+
+checkpoint_dir_by_time = [i for i in os.listdir(FLAGS.checkpoint_dir)
+                          if os.path.isdir(os.path.join(FLAGS.checkpoint_dir, i))][-1]
+
+files = os.listdir(os.path.join(FLAGS.checkpoint_dir, checkpoint_dir_by_time))
+
+if os.path.isdir(FLAGS.save_model_dir):
+  shutil.rmtree(FLAGS.save_model_dir)
 
 for f in files:
-  shutil.copy(os.path.join(FLAGS.checkpoint_dir_by_time, f), os.path.join(FLAGS.checkpoint_dir, f))
+  shutil.copy(os.path.join(FLAGS.checkpoint_dir, checkpoint_dir_by_time, f), os.path.join(FLAGS.checkpoint_dir, f))
 
 def export_graph(model_name, XtoY=True):
   graph = tf.Graph()
@@ -68,7 +80,7 @@ def export_graph(model_name, XtoY=True):
       output_graph_def = tf.graph_util.convert_variables_to_constants(
         sess, graph.as_graph_def(), [output_image.op.name])
 
-      tf.train.write_graph(output_graph_def, 'pretrained', str(iteration)+"_"+model_name, as_text=False)
+      tf.train.write_graph(output_graph_def, FLAGS.save_model_dir, str(iteration)+"_"+model_name, as_text=False)
 
 
 

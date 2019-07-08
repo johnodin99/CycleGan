@@ -1,23 +1,21 @@
-"""Translate an image to another image
-An example of command-line usage is:
-python export_graph.py --model pretrained/apple2orange.pb \
-                       --input input_sample.jpg \
-                       --output output_sample.jpg \
-                       --image_size 256
-"""
-
 import tensorflow as tf
 import os
 import utils
 from time import time
 
+FLAGS = tf.flags.FLAGS
+
+tf.flags.DEFINE_string('Test_input', r"./data/Test_input", 'the test image input directory path ')
+tf.flags.DEFINE_string('Test_output', r"./data/Test_output", 'the test image output directory path ')
+tf.flags.DEFINE_string('Model_dir', r"./pretrained", 'Model saved directory, default: ./pretrained')
+tf.flags.DEFINE_integer('image_size', '400', 'image size, default: 400')
 
 def inference():
-    path_src_test_pic = r"./data/Test_input"
-    path_dst_test_dir = r"./data/Test_output"
+    path_src_test_pic = FLAGS.Test_input
+    path_dst_test_dir = FLAGS.Test_output
     temp_img_list = os.listdir(path_src_test_pic)
-    image_size = 400
-    path_model_dir = r"./pretrained"
+    image_size = FLAGS.image_size
+    path_model_dir = FLAGS.Model_dir
     model_name_list = os.listdir(path_model_dir)
     Total_count_model = len(model_name_list)
     Total_count_img = len(temp_img_list)
